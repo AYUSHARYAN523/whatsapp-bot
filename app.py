@@ -3,19 +3,19 @@ from twilio.twiml.messaging_response import MessagingResponse
 
 app = Flask(__name__)
 
-@app.route("/whatsapp", methods=["POST"])
+@app.route("/whatsapp", methods=['POST'])
 def whatsapp():
-    msg = request.values.get('Body', '').strip()
+    incoming = request.values.get('Body', '').lower()
     resp = MessagingResponse()
+    msg = resp.message()
     
-    if msg.lower() in ["hi", "hello", "hey"]:
-        reply = "Hey Ayush! 👋 Main tumhara WhatsApp AI bot LIVE ho gaya. Kuch bhi pucho!"
+    if 'hi' in incoming or 'hello' in incoming:
+        msg.body("Hey Ayush! 👋 Main tumhara WhatsApp AI bot LIVE ho gaya. Ab kaam kar raha hun!")
     else:
-        reply = f"Tumne bola: '{msg}'\n\nBot working 100% ✅"
+        msg.body(f"Tumne bola: {incoming}")
     
-    resp.message(reply)
     return str(resp)
 
 @app.route("/")
 def home():
-    return "WhatsApp Bot is Running"
+    return "Bot is running!"
